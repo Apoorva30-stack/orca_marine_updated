@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samudra AI | Marine Intelligence Platform</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- LEFT PANEL: Agentic Conversational Interface -->
+        <aside class="chat-panel">
+            <div class="brand">
+                <h2>🌊 Samudra AI</h2>
+                <p>Marine Intelligence Agent</p>
+
+                <div class="lang-container" style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                    <select id="languageSelect" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1;">
+                        <option value="English">English</option>
+                        <option value="Hindi">हिन्दी (Hindi)</option>
+                        <option value="Bengali">বাংলা (Bengali)</option>
+                        <option value="Telugu">తెలుగు (Telugu)</option>
+                        <option value="Tamil">தமிழ் (Tamil)</option>
+                        <option value="Marathi">मराठी (Marathi)</option>
+                        <option value="Gujarati">ગુજરાતી (Gujarati)</option>
+                        <option value="Malayalam">മലയാളം (Malayalam)</option>
+                        <option value="Odia">ଓଡ଼ିଆ (Odia)</option>
+                        <option value="Kannada">ಕನ್ನಡ (Kannada)</option>
+                        <option value="Spanish">Español (Spanish)</option>
+                        <option value="French">Français (French)</option>
+                        <option value="Arabic">العربية (Arabic)</option>
+                        <option value="Mandarin Chinese">中文 (Mandarin)</option>
+                        <option value="Japanese">日本語 (Japanese)</option>
+                        <option value="German">Deutsch (German)</option>
+                        <option value="Russian">Русский (Russian)</option>
+                        <option value="Portuguese">Português (Portuguese)</option>
+                    </select>
+                    <a href="language.html" title="Select More Languages" style="text-decoration:none; background:#eaf4ff; border:1px solid #b6d4fe; padding:6px 10px; border-radius:6px; font-size:13px; font-weight:600; color:#0056b3; white-space:nowrap;">🌐 All</a>
+                </div>
+            </div> <!-- Closes .brand -->
+
+            <!-- CORRECTED CHAT WINDOW -->
+            <div class="chat-window notranslate" id="chatWindow">
+                <div class="message ai-message">
+                    Hello! I am your collaborative Marine AI. I'm connected to the Weather, Geospatial, and Ecosystem agents. How can I assist your maritime operations today?
+                </div>
+            </div>
+            <!-- =============================== -->
+
+            <div class="chat-input-container">
+    <input type="text" id="chatInput" placeholder="Ask or speak about fishing zones, weather..." onkeypress="handleEnter(event)">
+    <button id="voiceBtn" type="button" onclick="openVoiceModal()" title="Voice Assistant">🎙️</button>
+    <button onclick="processChat()">Send</button>
+</div>
+
+            <div class="quick-prompts">
+                <span onclick="triggerPrompt('Where is the nearest Potential Fishing Zone?')">📍 Find Fishing Zone</span>
+                <span onclick="triggerPrompt('Is it safe to venture into the Bay of Bengal today?')">⚠️ Risk Assessment</span>
+                <span onclick="triggerPrompt('Show me ecosystem health and chlorophyll levels.')">🦠 Ecosystem Data</span>
+            </div>
+        </aside>
+
+        <!-- RIGHT PANEL: Geospatial & Analytics Dashboard -->
+        <main class="dashboard">
+            
+            <!-- Top Controls -->
+            <header class="dash-header">
+                <div class="search-bar">
+                    <input type="text" id="cityInput" placeholder="Search coastal city or ocean...">
+                    <button onclick="getDashboardData()">Scan Location</button>
+                </div>
+                
+                <div class="active-agents" style="display: flex; align-items: center; gap: 15px;">
+                    <div>
+                        <span class="badge active">🌦️ Weather Agent</span>
+                        <span class="badge active">📍 Geospatial Agent</span>
+                        <span class="badge active">🐟 Ecosystem Agent</span>
+                    </div>
+                    <button onclick="logoutApp()" style="background:#f44336; color:white; border:none; padding:8px 15px; border-radius:20px; cursor:pointer; font-size: 13px; font-weight: bold;">Log Out</button>
+                </div>
+            </header>
+
+            <div class="warning-banner" id="warningDashboard" style="display: none;"></div>
+
+            <!-- Map Section -->
+            <section class="map-section">
+                <div class="section-title">
+                    <h3>🗺️ Geospatial Risk & Routing Intelligence</h3>
+                </div>
+                <div id="mapWrapper" class="map-wrapper">
+                    <button onclick="toggleFullscreen()" class="fullscreen-btn" title="Toggle Fullscreen">⛶</button>
+                    <div id="map" class="map-container"></div>
+                </div>
+                <div class="map-legend">
+                    <span><div class="legend-dot" style="background: #4caf50;"></div> Low Risk 🟢</span>
+                    <span><div class="legend-dot" style="background: #ffeb3b;"></div> Moderate Risk 🟡</span>
+                    <span><div class="legend-dot" style="background: #ff9800;"></div> High Risk 🟠</span>
+                    <span><div class="legend-dot" style="background: #f44336;"></div> Extreme Risk 🔴</span>
+                    <span><div class="legend-dot" style="background: #00e5ff;"></div> Marine Hotspot 🐟</span>
+                </div>
+            </section>
+
+            <!-- Ecosystem Section -->
+            <section class="ecosystem-section">
+                <div class="section-title">
+                    <h3>🦠 Marine Ecosystem Health</h3>
+                </div>
+                <div class="eco-grid">
+                    <div class="eco-card">
+                        <h4>Chlorophyll-a</h4>
+                        <p id="eco-chloro" class="eco-value">-- mg/m³</p>
+                        <small>Indicator of Phytoplankton</small>
+                    </div>
+                    <div class="eco-card">
+                        <h4>Dissolved Oxygen</h4>
+                        <p id="eco-do" class="eco-value">-- mg/L</p>
+                        <small>Vital for Marine Life</small>
+                    </div>
+                    <div class="eco-card">
+                        <h4>Water Pollution</h4>
+                        <p id="eco-pollution" class="eco-value">--</p>
+                        <small>Industrial runoff index</small>
+                    </div>
+                    <div class="eco-card">
+                        <h4>Total Species</h4>
+                        <p id="eco-species" class="eco-value">--</p>
+                        <small>Estimated local count</small>
+                    </div>
+                    <div class="eco-card">
+                        <h4>Endangered</h4>
+                        <p id="eco-endangered" class="eco-value" style="font-size: 16px;">--</p>
+                        <small>Protected species in area</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="chart-card">
+                    <h3>💨 Wind Speed (24h Forecast)</h3>
+                    <canvas id="windChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>🌊 Wave Height (24h Forecast)</h3>
+                    <canvas id="waveChart"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- VOICE ASSISTANT MODAL -->
+    <div id="voiceModal" class="voice-modal-overlay">
+        <div class="voice-modal-content">
+            <div class="voice-pulse-circle">
+                <span style="font-size: 40px;">🎙️</span>
+            </div>
+            <h3 style="color: #0056b3; margin: 15px 0 5px 0;">Listening...</h3>
+            <p id="liveTranscript" class="live-transcript">Speak now...</p>
+            <div class="voice-modal-actions">
+                <button class="cancel-btn" onclick="cancelVoiceModal()">Cancel</button>
+                <button class="finish-btn" onclick="finishVoiceModal()">Finish & Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+
+    <!-- NEW: Hidden Google Translate Engine -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en', 
+            autoDisplay: false
+        }, 'google_translate_element');
+      }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

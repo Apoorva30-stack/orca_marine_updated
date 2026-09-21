@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samudra AI | Select Language</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f8;
+            color: #1e293b;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .brand-title h1 {
+            color: #0056b3;
+            font-size: 26px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-title p {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #ffffff;
+            color: #0056b3;
+            border: 1px solid #cbd5e1;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .search-box {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #1e293b;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 25px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 4px solid #0056b3;
+            padding-left: 10px;
+        }
+
+        .lang-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .lang-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .lang-card:hover {
+            border-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 86, 179, 0.1);
+        }
+
+        .lang-card.active {
+            border-color: #0056b3;
+            background: #f0f7ff;
+        }
+
+        .native-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #0056b3;
+            margin-bottom: 4px;
+        }
+
+        .english-name {
+            font-size: 13px;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .region-tag {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <div class="brand-title">
+                <h1>🌐 Choose Your Language</h1>
+                <p>Select your preferred communication language for AI operations</p>
+            </div>
+            <a href="index.html" class="back-btn">← Back to Dashboard</a>
+        </header>
+
+        <input type="text" id="searchLang" class="search-box" placeholder="🔍 Search language or region (e.g. Tamil, Hindi, Japanese, French)..." oninput="filterLanguages()">
+
+        <!-- REGIONAL LANGUAGES OF INDIA -->
+        <div class="section-title">🇮🇳 Regional & Coastal Languages of India</div>
+        <div class="lang-grid" id="indiaGrid">
+            <!-- South & Coastal -->
+            <div class="lang-card" onclick="chooseLanguage('Tamil')">
+                <span class="native-name">தமிழ்</span>
+                <span class="english-name">Tamil</span>
+                <span class="region-tag">Tamil Nadu & Puducherry</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Telugu')">
+                <span class="native-name">తెలుగు</span>
+                <span class="english-name">Telugu</span>
+                <span class="region-tag">Andhra Pradesh & Telangana</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Malayalam')">
+                <span class="native-name">മലയാളം</span>
+                <span class="english-name">Malayalam</span>
+                <span class="region-tag">Kerala & Lakshadweep</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Kannada')">
+                <span class="native-name">ಕನ್ನಡ</span>
+                <span class="english-name">Kannada</span>
+                <span class="region-tag">Karnataka</span>
+            </div>
+
+            <!-- East & Coastal -->
+            <div class="lang-card" onclick="chooseLanguage('Bengali')">
+                <span class="native-name">বাংলা</span>
+                <span class="english-name">Bengali</span>
+                <span class="region-tag">West Bengal & North-East</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Odia')">
+                <span class="native-name">ଓଡ଼ିଆ</span>
+                <span class="english-name">Odia</span>
+                <span class="region-tag">Odisha Coast</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Assamese')">
+                <span class="native-name">অসমীয়া</span>
+                <span class="english-name">Assamese</span>
+                <span class="region-tag">Assam & North-East</span>
+            </div>
+
+            <!-- West & Coastal -->
+            <div class="lang-card" onclick="chooseLanguage('Marathi')">
+                <span class="native-name">मराठी</span>
+                <span class="english-name">Marathi</span>
+                <span class="region-tag">Maharashtra & Konkan</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Gujarati')">
+                <span class="native-name">ગુજરાતી</span>
+                <span class="english-name">Gujarati</span>
+                <span class="region-tag">Gujarat & Saurashtra</span>
+            </div>
+
+            <!-- North & Central -->
+            <div class="lang-card" onclick="chooseLanguage('Hindi')">
+                <span class="native-name">हिन्दी</span>
+                <span class="english-name">Hindi</span>
+                <span class="region-tag">Northern & Central India</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Punjabi')">
+                <span class="native-name">ਪੰਜਾਬੀ</span>
+                <span class="english-name">Punjabi</span>
+                <span class="region-tag">Punjab</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Urdu')">
+                <span class="native-name">اردو</span>
+                <span class="english-name">Urdu</span>
+                <span class="region-tag">Jammu & Kashmir, Telangana</span>
+            </div>
+        </div>
+
+        <!-- GLOBAL LANGUAGES -->
+        <div class="section-title">🌍 Global Languages of Major Countries</div>
+        <div class="lang-grid" id="globalGrid">
+            <div class="lang-card" onclick="chooseLanguage('English')">
+                <span class="native-name">English</span>
+                <span class="english-name">English</span>
+                <span class="region-tag">USA, UK, Australia, Global</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Spanish')">
+                <span class="native-name">Español</span>
+                <span class="english-name">Spanish</span>
+                <span class="region-tag">Spain & Latin America</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('French')">
+                <span class="native-name">Français</span>
+                <span class="english-name">French</span>
+                <span class="region-tag">France, Canada, West Africa</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Arabic')">
+                <span class="native-name">العربية</span>
+                <span class="english-name">Arabic</span>
+                <span class="region-tag">Middle East & North Africa</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Mandarin Chinese')">
+                <span class="native-name">中文</span>
+                <span class="english-name">Mandarin Chinese</span>
+                <span class="region-tag">China, Taiwan, Singapore</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Japanese')">
+                <span class="native-name">日本語</span>
+                <span class="english-name">Japanese</span>
+                <span class="region-tag">Japan</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('German')">
+                <span class="native-name">Deutsch</span>
+                <span class="english-name">German</span>
+                <span class="region-tag">Germany, Austria, Switzerland</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Russian')">
+                <span class="native-name">Русский</span>
+                <span class="english-name">Russian</span>
+                <span class="region-tag">Russia & Central Asia</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Portuguese')">
+                <span class="native-name">Português</span>
+                <span class="english-name">Portuguese</span>
+                <span class="region-tag">Brazil, Portugal</span>
+            </div>
+            <div class="lang-card" onclick="chooseLanguage('Indonesian')">
+                <span class="native-name">Bahasa Indonesia</span>
+                <span class="english-name">Indonesian</span>
+                <span class="region-tag">Indonesia</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pre-highlight current selection
+        const savedLang = localStorage.getItem("selectedLanguage") || "English";
+        document.querySelectorAll(".lang-card").forEach(card => {
+            if (card.querySelector(".english-name").innerText.toLowerCase() === savedLang.toLowerCase()) {
+                card.classList.add("active");
+            }
+        });
+
+        function chooseLanguage(lang) {
+            localStorage.setItem("selectedLanguage", lang);
+            window.location.href = "index.html";
+        }
+
+        function filterLanguages() {
+            const query = document.getElementById("searchLang").value.toLowerCase();
+            const cards = document.querySelectorAll(".lang-card");
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(query) ? "flex" : "none";
+            });
+        }
+    </script>
+</body>
+</html>
